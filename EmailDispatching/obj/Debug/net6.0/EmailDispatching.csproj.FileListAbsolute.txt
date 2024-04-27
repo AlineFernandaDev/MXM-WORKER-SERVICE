@@ -50,3 +50,4 @@ C:\Users\aline\Desktop\MXM-EMAIL-SERVICE\EmailDispatching\obj\Debug\net6.0\ref\E
 C:\Users\aline\Desktop\MXM-EMAIL-SERVICE\EmailDispatching\bin\Debug\net6.0\Microsoft.Extensions.ObjectPool.dll
 C:\Users\aline\Desktop\MXM-EMAIL-SERVICE\EmailDispatching\bin\Debug\net6.0\RabbitMQ.DependencyInjection.dll
 C:\Users\aline\Desktop\MXM-EMAIL-SERVICE\EmailDispatching\bin\Debug\net6.0\RabbitMQ.ServiceModel.dll
+C:\Users\aline\Desktop\MXM-EMAIL-SERVICE\EmailDispatching\obj\Debug\net6.0\EmailDispatching.sourcelink.json

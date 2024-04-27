@@ -6,6 +6,8 @@ using RabbitMQ.Client.Events;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
 using EmailDispatching.Repositories.Contracts;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace EmailDispatching.Repositories.Services
 {
@@ -26,15 +28,19 @@ namespace EmailDispatching.Repositories.Services
                 VirtualHost = _configuration["RabbitMQ:VirtualHost"],
                 Port = Convert.ToInt32(_configuration["RabbitMQ:Port"]),
             };
-            _channel = CreateChannel();
+            _channel = CreateModel();
         }
 
         public async Task<string> RabbitMQ(string queueName)
         {
             try
             {
-                // Criar conexão e começar a consumir mensagens
-                await CreateConnection(queueName);
+                _channel.QueueDeclare(queue: "queueSendEmails", durable: true, exclusive: false, autoDelete: false, arguments: null);
+                if (_channel == null || _channel.IsClosed)
+                {
+                    _channel = CreateModel();
+                }
+                await ProcessarEmails("queueSendEmails");
                 return "RabbitMQ connection started successfully";
             }
             catch (Exception ex)
@@ -43,58 +49,64 @@ namespace EmailDispatching.Repositories.Services
             }
         }
 
-        private async Task CreateConnection(string queueName)
-        {
-            _channel.QueueDeclare(queue: queueName, durable: true, exclusive: true, autoDelete: false, arguments: null);
-
-            // Configurar o consumidor para receber e-mails da fila
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (model, ea) =>
-            {
-                var body = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(body);
-                await SendEmail(message); //TODO: SERIALIZAR E ENVIAR COMO E-MAIL
-            };
-            // Iniciar o consumo da fila
-            await Task.Run(() => _channel.BasicConsume(queue: queueName, autoAck: false, consumer: consumer));
-        }
-
-        public IModel CreateChannel()
+        public IModel CreateModel()
         {
             var connection = _connectionFactory.CreateConnection();
             return connection.CreateModel();
         }
 
-        public async Task SendEmail(string message)
+        private async Task ProcessarEmails(string queueName)
         {
-            // Lógica para processar a mensagem e enviar o e-mail
-            var parts = message.Split('|'); // Supõe que a mensagem está no formato "to|subject|body"
-            string to = parts[0];
-            string subject = parts[1];
-            string body = parts[2];
-
-            // Configuração do provedor de e-mail (substitua com suas próprias credenciais e servidor SMTP)
-            var smtpServer = _configuration["EmailSettings:Mail"];
-            var smtpPort = Convert.ToInt32(_configuration["EmailSettings:Port"]);
-            var username = _configuration["EmailSettings:UserName"];
-            var password = _configuration["EmailSettings:Password"];
-
-            using (var client = new SmtpClient(smtpServer, smtpPort))
+            var consumer = new EventingBasicConsumer(_channel);
+            consumer.Received += async (sender, ea) =>
             {
-                client.UseDefaultCredentials = false;
-                client.Credentials = new System.Net.NetworkCredential(username, password);
-                client.EnableSsl = true;
+                var objeto = ea.Body.ToArray();
+                var message = Encoding.UTF8.GetString(objeto);
 
-                var mail = new MailMessage(username, to, subject, body);
-                await client.SendMailAsync(mail);
-            }
+                var email = JsonConvert.DeserializeObject<EmailMessage>(message);
 
-            Console.WriteLine($"E-mail enviado para {to}");
+
+                var Host = _configuration["EmailSettings:smtpHost"];
+                var Port = Convert.ToInt32(_configuration["EmailSettings:smtpPort"]);
+                var UsernameEmail = _configuration["EmailSettings:UsernameEmail"];
+                var UsernamePassword = _configuration["EmailSettings:UsernamePassword"];
+
+                using (var client = new SmtpClient(Host, Port))
+                {
+                    client.UseDefaultCredentials = false;
+                    client.Credentials = new System.Net.NetworkCredential(UsernameEmail, UsernamePassword);
+                    client.EnableSsl = true;
+
+                    try
+                    {
+                        var mail = new MailMessage()
+                        {
+                            From = new MailAddress(_configuration["EmailSettings:FromEmail"]),
+                            To = { email.To },
+                            Subject = email.Subject,
+                            Body = email.Body
+                        };
+
+                        await client.SendMailAsync(mail);
+
+                        Console.WriteLine($"E-mail enviado para {mail.To} com sucesso.");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Erro ao enviar e-mail: {ex.Message}");
+                    }
+                }
+            };
+
+            _channel.BasicConsume(queue: "queueSendEmails", autoAck: false, consumer: consumer);
+            await Task.CompletedTask;
         }
-
-        public IRabbitMQConnection? RabbitMQ(object queueName)
+        public class EmailMessage
         {
-            throw new NotImplementedException();
+            public string From { get; set; } = null!;
+            public string To { get; set; } = null!;
+            public string Subject { get; set; } = null!;
+            public string Body { get; set; } = null!;
         }
     }
 }

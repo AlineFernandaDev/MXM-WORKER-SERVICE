@@ -9,6 +9,5 @@ namespace EmailDispatching.Repositories.Contracts
     public interface IRabbitMQConnection
     {
         public Task<string> RabbitMQ(string queueName);
-        IRabbitMQConnection? RabbitMQ(object queueName);
     }
 }
