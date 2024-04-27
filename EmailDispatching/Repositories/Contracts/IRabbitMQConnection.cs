@@ -8,6 +8,7 @@ namespace EmailDispatching.Repositories.Contracts
 {
     public interface IRabbitMQConnection
     {
-        public Task<string> RabbitMQ(string queueName);
+        Task<string> ConsumerRabbitMQ(string queueName);
+        Task<string> ProcessarEmails();
     }
 }

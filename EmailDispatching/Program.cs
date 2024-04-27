@@ -7,9 +7,7 @@ IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddSingleton<IRabbitMQConnection, RabbitMQConnection>();
-
-        ;
+        services.AddScoped<IRabbitMQConnection, RabbitMQConnection>();
         
     })
     
@@ -30,4 +28,3 @@ IHost host = Host.CreateDefaultBuilder(args)
 await host.RunAsync();
 
 
-//TODO:ver o chat gpt e configurar as injecoes de dependencia na worker e da worker extender na Program, Não esquece daquela configuração do vigia da fila

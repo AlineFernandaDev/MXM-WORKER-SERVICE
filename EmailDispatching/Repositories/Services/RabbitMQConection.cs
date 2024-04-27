@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using EmailDispatching.Repositories.Contracts;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Extensions.Options;
 
 namespace EmailDispatching.Repositories.Services
 {
@@ -16,9 +17,11 @@ namespace EmailDispatching.Repositories.Services
         private readonly IConfiguration _configuration;
         private readonly ConnectionFactory _connectionFactory;
         private IModel _channel;
+        private readonly EmailSettings _emailSettings;
 
-        public RabbitMQConnection(IConfiguration configuration)
+        public RabbitMQConnection(IConfiguration configuration,IOptions<EmailSettings> emailSettings)
         {
+            _emailSettings = emailSettings.Value;
             _configuration = configuration;
             _connectionFactory = new ConnectionFactory()
             {
@@ -31,17 +34,31 @@ namespace EmailDispatching.Repositories.Services
             _channel = CreateModel();
         }
 
-        public async Task<string> RabbitMQ(string queueName)
+        public async Task<string> ConsumerRabbitMQ(string queueName)
         {
             try
             {
-                _channel.QueueDeclare(queue: "queueSendEmails", durable: true, exclusive: false, autoDelete: false, arguments: null);
-                if (_channel == null || _channel.IsClosed)
+                _channel.QueueDeclarePassive(queueName);
+
+                string stringObjetcReturn = "";
+
+                var consumer = new EventingBasicConsumer(_channel);
+                consumer.Received += async (model, ea) =>
                 {
-                    _channel = CreateModel();
-                }
-                await ProcessarEmails("queueSendEmails");
-                return "RabbitMQ connection started successfully";
+                    var body = ea.Body.ToArray();
+                    stringObjetcReturn = Encoding.UTF8.GetString(body);
+
+
+                    _channel.BasicAck(deliveryTag: ea.DeliveryTag, multiple: false);
+                };
+
+                _channel.BasicConsume(queue: queueName,
+                                      autoAck: false,
+                                      consumer: consumer);
+
+                await Task.Delay(Timeout.Infinite);
+
+                return stringObjetcReturn;
             }
             catch (Exception ex)
             {
@@ -55,58 +72,53 @@ namespace EmailDispatching.Repositories.Services
             return connection.CreateModel();
         }
 
-        private async Task ProcessarEmails(string queueName)
+        public async Task<string>ProcessarEmails()
         {
-            var consumer = new EventingBasicConsumer(_channel);
-            consumer.Received += async (sender, ea) =>
+            var message = await ConsumerRabbitMQ("queueSendEmails");
+            return message;
+
+            Console.WriteLine($"Mensagem recebida: {message}");
+            // if (message == null)
+            // {
+            //     return;
+            // };
+        var email = JsonConvert.DeserializeObject<SendEmail>(message);
+        var sendMessage = new MailMessage{
+            From = new MailAddress(_emailSettings.EmailFromAddress),
+            Subject = email.Nome,
+            Body = email.Corpo,
+            IsBodyHtml = true,
+        };
+        sendMessage.To.Add(email.EnderecoDestino);
+            using (var client = new SmtpClient(_emailSettings.ServerSmtp, _emailSettings.Port))
             {
-                var objeto = ea.Body.ToArray();
-                var message = Encoding.UTF8.GetString(objeto);
-
-                var email = JsonConvert.DeserializeObject<EmailMessage>(message);
-
-
-                var Host = _configuration["EmailSettings:smtpHost"];
-                var Port = Convert.ToInt32(_configuration["EmailSettings:smtpPort"]);
-                var UsernameEmail = _configuration["EmailSettings:UsernameEmail"];
-                var UsernamePassword = _configuration["EmailSettings:UsernamePassword"];
-
-                using (var client = new SmtpClient(Host, Port))
-                {
-                    client.UseDefaultCredentials = false;
-                    client.Credentials = new System.Net.NetworkCredential(UsernameEmail, UsernamePassword);
-                    client.EnableSsl = true;
-
-                    try
-                    {
-                        var mail = new MailMessage()
-                        {
-                            From = new MailAddress(_configuration["EmailSettings:FromEmail"]),
-                            To = { email.To },
-                            Subject = email.Subject,
-                            Body = email.Body
-                        };
-
-                        await client.SendMailAsync(mail);
-
-                        Console.WriteLine($"E-mail enviado para {mail.To} com sucesso.");
-                    }
-                    catch (Exception ex)
-                    {
-                        Console.WriteLine($"Erro ao enviar e-mail: {ex.Message}");
-                    }
+               try{
+                client.Credentials = new System.Net.NetworkCredential(_emailSettings.UserName, _emailSettings.Password);
+                client.EnableSsl = true;
+                await client.SendMailAsync(sendMessage);
+                return $"E-mail enviado para {email.EnderecoDestino} com sucesso.";
                 }
-            };
-
-            _channel.BasicConsume(queue: "queueSendEmails", autoAck: false, consumer: consumer);
-            await Task.CompletedTask;
+                catch (Exception ex)
+                {
+                    return$"Erro ao enviar e-mail: {ex.Message}";
+                    
+                }
+            }
         }
-        public class EmailMessage
+        public class SendEmail
         {
-            public string From { get; set; } = null!;
-            public string To { get; set; } = null!;
-            public string Subject { get; set; } = null!;
-            public string Body { get; set; } = null!;
+            public string Nome { get; set; } = null!;
+            public string EnderecoDestino { get; set; } = null!;
+            public string Corpo { get; set; } = null!;
+        }
+        public class EmailSettings
+        {
+            public string ServerSmtp { get; set; } = null!;
+            public int Port { get; set; }
+            public string UserName { get; set; } = null!;
+            public string Password { get; set; } = null!;
+            public bool EnableSsl { get; set; }
+            public string EmailFromAddress { get; set; } = null!;
         }
     }
 }
