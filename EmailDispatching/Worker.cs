@@ -1,37 +1,33 @@
-using EmailDispatching.Repositories.Contracts;
+using EmailDispatching.Interfaces;
 namespace EmailDispatching
 {
     public class Worker : BackgroundService
     {
         private readonly ILogger<Worker> _logger;
-        private readonly IServiceProvider _serviceProvider;
+        private readonly IRabbitMQConnection _rabbitMQConnection;
 
-        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
+        public Worker(ILogger<Worker> logger, IRabbitMQConnection rabbitMQConnection)
         {
             _logger = logger;
-            _serviceProvider = serviceProvider;
+            _rabbitMQConnection = rabbitMQConnection;
         }
-
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             while (!stoppingToken.IsCancellationRequested)
 
             {
                 _logger.LogInformation("Worker running at: {time}", DateTimeOffset.Now);
-                var result = await ValidarEmail();
+                var result = await ValidateEmail();
                 _logger.LogInformation("Result from RabbitMQConnection: {result}", result);
 
                 await Task.Delay(1000, stoppingToken);
             }
         }
-    private async Task<string>ValidarEmail(){
-        using(var scope = _serviceProvider.CreateScope()){
-            var _rabbitMQConnection = scope.ServiceProvider.GetRequiredService<IRabbitMQConnection>();
-            var result = await _rabbitMQConnection.ProcessarEmails();
-        return result;
+        private async Task<string> ValidateEmail()
+        {
+            var result = await _rabbitMQConnection.EmailProcess();
+            return result;
         }
-       
     }
-}
 }
 

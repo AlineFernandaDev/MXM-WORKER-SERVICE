@@ -1,28 +1,24 @@
 using EmailDispatching;
-using EmailDispatching.Repositories.Contracts;
-using EmailDispatching.Repositories.Services;
-using RabbitMQ.Client;
+using EmailDispatching.Interfaces;
+using EmailDispatching.Models;
+using EmailDispatching.Services;
+IConfiguration configuration = new ConfigurationBuilder()
+
+   .SetBasePath(Directory.GetCurrentDirectory())
+
+   .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+
+   .Build();
+
 
 IHost host = Host.CreateDefaultBuilder(args)
     .ConfigureServices(services =>
     {
         services.AddHostedService<Worker>();
-        services.AddScoped<IRabbitMQConnection, RabbitMQConnection>();
-        
+        services.AddSingleton<IRabbitMQConnection, RabbitMQConnection>();
+        services.Configure<EmailSettings>(configuration.GetSection("SmptConfig"));
     })
-    
-    
     .Build();
-
-    IConfiguration configuration = new ConfigurationBuilder()
-
-    .SetBasePath(Directory.GetCurrentDirectory())
-
-    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-    
-    .Build();
-
-
 
 
 await host.RunAsync();
