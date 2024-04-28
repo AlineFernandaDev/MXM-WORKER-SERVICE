@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HHtS7+01E299cWc8eUWDZmE0bEERjFmOd4LBWF0o3n4Q4wzOfU1IIcVAAwZ4tOr2Ot8Ddb87OD3bFIec5g+Diw==",
+  "dgSpecHash": "KJy7+2DTUSI1CoHrhqpWnejD0N1QTwAVTa9XxjNby8MLkW6U4Du90K36ozm/5kdFuKwZB0hilKyt5ZOUoZG/8A==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
+  "projectFilePath": "C:\\Users\\aline\\Desktop\\socorro\\ALM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",
@@ -40,7 +40,11 @@
     "C:\\Users\\aline\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.0.0\\system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\system.text.encodings.web\\6.0.0\\system.text.encodings.web.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\system.text.json\\6.0.0\\system.text.json.6.0.0.nupkg.sha512",
-    "C:\\Users\\aline\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512"
+    "C:\\Users\\aline\\.nuget\\packages\\system.threading.channels\\7.0.0\\system.threading.channels.7.0.0.nupkg.sha512",
+    "C:\\Users\\aline\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.29\\microsoft.netcore.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\aline\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.29\\microsoft.windowsdesktop.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\aline\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.29\\microsoft.aspnetcore.app.ref.6.0.29.nupkg.sha512",
+    "C:\\Users\\aline\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.29\\microsoft.netcore.app.host.win-x64.6.0.29.nupkg.sha512"
   ],
   "logs": [
     {
