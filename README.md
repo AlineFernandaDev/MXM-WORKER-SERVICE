@@ -1,3 +1,6 @@
+## Desafio proposto pela empresa MXM Sistemas, onde eu e mais dois desenvolvedores tinhamos de criar um formulário com opções de formatação, uma fila através do RabbitMQ e o disparo desses emails de forma totalmente funcional. 
+## Eu fiquei com a parte dos emais e foi bem desafiador e didático.
+
 ## Serviço de Envio de E-mails com RabbitMQ
 Este é um serviço para processamento e envio de e-mails utilizando RabbitMQ.
 
@@ -30,7 +33,7 @@ Execute o comando dotnet build para compilar o projeto.
 
 Execute o comando dotnet run para iniciar o serviço.
 
-### Configurações do RabbitMQ e do E-mail
+## Configurações do RabbitMQ e do E-mail
 
 As configurações do RabbitMQ e do servidor de e-mail devem ser definidas no arquivo appsettings.json. Aqui está um exemplo de como as configurações devem ser definidas:
 
@@ -64,14 +67,6 @@ ou:
     HostName = {"localhost"}
 
 Essa configuração se encontra na classe RabbitMQConection, dentro da pasta Services.
-
-### Funcionamento em conjunto com API
-
-Copie a pasta do serviço de emails para os arquivos de sua API, certifique-se de manter a estrutura e organização da mesma, faça também um back-up, navegue até a classe Program da API e adicione
-
-
-        
-    services.AddHostedService<RabbitMQWorker>();
 
 
 #### Idealizadora
