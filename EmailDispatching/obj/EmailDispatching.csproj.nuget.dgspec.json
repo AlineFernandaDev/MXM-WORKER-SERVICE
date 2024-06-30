@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj": {}
+    "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj": {}
   },
   "projects": {
-    "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj": {
+    "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
+        "projectUniqueName": "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
         "projectName": "EmailDispatching",
-        "projectPath": "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
+        "projectPath": "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
         "packagesPath": "C:\\Users\\aline\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\obj\\",
+        "outputPath": "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\aline\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -49,7 +49,7 @@
             },
             "Newtonsoft.Json": {
               "target": "Package",
-              "version": "[13.0.3, )"
+              "version": "[13.0.2, )"
             },
             "RabbitMQ.Client": {
               "target": "Package",

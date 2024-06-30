@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "HHtS7+01E299cWc8eUWDZmE0bEERjFmOd4LBWF0o3n4Q4wzOfU1IIcVAAwZ4tOr2Ot8Ddb87OD3bFIec5g+Diw==",
+  "dgSpecHash": "sQYz2XsLhrKHbm0Yl5ezdf7s1oEzxECyccQz3tkfhbcsk+IT4Qygj/ogAWrAyu1qtFp35NWTnknbTs5g9j/Cxg==",
   "success": true,
-  "projectFilePath": "C:\\Users\\aline\\Desktop\\MXM-EMAIL-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
+  "projectFilePath": "C:\\Users\\aline\\Documents\\Projetos Backend\\MXM-WORKER-SERVICE\\EmailDispatching\\EmailDispatching.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.configuration\\6.0.0\\microsoft.extensions.configuration.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.configuration.abstractions\\6.0.0\\microsoft.extensions.configuration.abstractions.6.0.0.nupkg.sha512",
@@ -30,7 +30,7 @@
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.options\\6.0.0\\microsoft.extensions.options.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\6.0.0\\microsoft.extensions.options.configurationextensions.6.0.0.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\microsoft.extensions.primitives\\6.0.0\\microsoft.extensions.primitives.6.0.0.nupkg.sha512",
-    "C:\\Users\\aline\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\aline\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\rabbitmq.client\\6.8.1\\rabbitmq.client.6.8.1.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\rabbitmq.dependencyinjection\\2.6201.3000\\rabbitmq.dependencyinjection.2.6201.3000.nupkg.sha512",
     "C:\\Users\\aline\\.nuget\\packages\\rabbitmq.servicemodel\\3.6.9\\rabbitmq.servicemodel.3.6.9.nupkg.sha512",
