@@ -11,23 +11,22 @@ namespace EmailDispatching.Services
 {
     public class RabbitMQConnection : IRabbitMQConnection
     {
-        private readonly IConfiguration _configuration;
+        private readonly RabbitMQConfiguration _rabbitMQconfiguration;
         private IConnection _connection;
         private readonly ConnectionFactory _connectionFactory;
         private IModel _channel;
         private readonly EmailSettings _emailSettings;
 
-        public RabbitMQConnection(IConfiguration configuration, IOptions<EmailSettings> emailSettings)
+        public RabbitMQConnection(IOptions<EmailSettings> emailSettings, IOptions<RabbitMQConfiguration> rabbitMQconfiguration)
         {
             _emailSettings = emailSettings.Value;
-            _configuration = configuration;
             _connectionFactory = new ConnectionFactory()
             {
-                UserName = _configuration["RabbitMQ:UserName"],
-                Password = _configuration["RabbitMQ:Password"],
-                HostName = _configuration["RabbitMQ:HostName"],
-                VirtualHost = _configuration["RabbitMQ:VirtualHost"],
-                Port = Convert.ToInt32(_configuration["RabbitMQ:Port"]),
+                UserName = _rabbitMQconfiguration.UserName,
+                Password = _rabbitMQconfiguration.Password,
+                HostName = _rabbitMQconfiguration.HostName,
+                VirtualHost = _rabbitMQconfiguration.VirtualHost,
+                Port = _rabbitMQconfiguration.Port,
             };
             _channel = CreateModel();
         }
