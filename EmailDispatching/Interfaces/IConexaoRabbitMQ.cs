@@ -8,7 +8,5 @@ namespace EmailDispatching.Interfaces
 {
     public interface IRabbitMQConnection
     {
-        Task<string> ConsumerRabbitMQ(string queueName);
-        Task<string> EmailProcess();
     }
 }
