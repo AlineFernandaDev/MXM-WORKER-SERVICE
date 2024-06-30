@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace EmailDispatching.Models
 {
-    public class SendMail
+    public class FormatoEmail
     {        
         public string Nome { get; set; } = null!;
         public string EnderecoDestino { get; set; } = null!;
